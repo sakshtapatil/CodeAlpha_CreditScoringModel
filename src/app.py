@@ -2,24 +2,18 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# ==========================
-# Load Saved Files
-# ==========================
+
 
 model = joblib.load("models/random_forest.pkl")
 scaler = joblib.load("models/scaler.pkl")
 feature_columns = joblib.load("models/feature_columns.pkl")
 
-# ==========================
-# Title
-# ==========================
+
 
 st.title("🏦 Credit Scoring Prediction System")
 st.write("Enter the customer details below.")
 
-# ==========================
-# Numeric Inputs
-# ==========================
+
 
 col1, col2 = st.columns(2)
 
@@ -34,9 +28,7 @@ with col2:
     number_credits = st.number_input("Number of Existing Credits", min_value=1, value=1)
     people_liable = st.number_input("People Liable", min_value=1, max_value=2, value=1)
 
-# ==========================
-# Categorical Inputs
-# ==========================
+
 
 status = st.selectbox(
     "Status",
@@ -170,9 +162,7 @@ foreign_worker = st.selectbox(
     ]
 )
 
-# ==========================
-# Prediction
-# ==========================
+
 
 if st.button("Predict Credit Risk"):
 
@@ -199,21 +189,21 @@ if st.button("Predict Credit Risk"):
         "foreign_worker": foreign_worker
     }
 
-    # Convert dictionary to DataFrame
+    
     new_df = pd.DataFrame([customer])
 
-    # One-Hot Encoding
+    
     new_df = pd.get_dummies(new_df)
 
-    # Match training columns
+    
     new_df = new_df.reindex(columns=feature_columns, fill_value=0)
 
-    # Scale the data
+    
     new_df = scaler.transform(new_df)
 
     
 
-    # Predict
+    
     prediction = model.predict(new_df)
 
     if prediction[0] == 1:

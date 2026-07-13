@@ -1,12 +1,12 @@
 import joblib
 import pandas as pd
 
-# Load saved files
+
 model = joblib.load("models/random_forest.pkl")
 scaler = joblib.load("models/scaler.pkl")
 feature_columns = joblib.load("models/feature_columns.pkl")
 
-# New customer
+
 new_customer = {
     "status": "... < 100 DM",
     "duration": 12,
@@ -30,22 +30,22 @@ new_customer = {
     "foreign_worker": "yes"
 }
 
-# Convert to DataFrame
+
 new_df = pd.DataFrame([new_customer])
 
-# One-Hot Encoding
+
 new_df = pd.get_dummies(new_df)
 
-# Match training columns
+
 new_df = new_df.reindex(columns=feature_columns, fill_value=0)
 
-# Scale
+
 new_df = scaler.transform(new_df)
 
-# Predict
+
 prediction = model.predict(new_df)
 
-# Result
+
 if prediction[0] == 1:
     print("✅ Good Credit Risk")
 else:
